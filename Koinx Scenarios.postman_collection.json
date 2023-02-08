@@ -1,0 +1,1142 @@
+{
+	"info": {
+		"_postman_id": "ef552784-71f9-495a-a1f6-4e6de41486d0",
+		"name": "Koinx Scenarios",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Verify recording of transaction record and deleting it.then",
+			"item": [
+				{
+					"name": "POST transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"var responseData = pm.response.json();\r",
+									"console.log(responseData)\r",
+									"pm.environment.set(\"id\", responseData.id);\r",
+									"pm.environment.set(\"creation\", responseData.created_at);\r",
+									"pm.environment.set(\"sentCoinAmount\", responseData.sentCoinAmount);\r",
+									"pm.environment.set(\"receivedCoinAmount\", responseData.receivedCoinAmount);\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test('Validate detail as new transaction record created', function(){\r",
+									"    pm.expect(responseData.sentCoin).to.eql(pm.environment.get(\"coin1\")),\r",
+									"    pm.expect(responseData.receivedCoin).to.eql(pm.environment.get(\"coin2\")),\r",
+									"     pm.expect(responseData.sentCoinAmount).to.eql(pm.environment.get(\"sentCoinAmount\")),\r",
+									"    pm.expect(responseData.receivedCoinAmount).to.eql(pm.environment.get(\"receivedCoinAmount\"))\r",
+									"})\r",
+									"\r",
+									"\r",
+									"    "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"coin1\": \"{{coin1}}\",\n  \"coin2\": \"{{coin2}}\",\n  \"coin1Amount\": 300,\n  \"coin2Amount\": 2\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api:gHPd8le5/transaction",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api:gHPd8le5",
+								"transaction"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET transaction by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var responseData = pm.response.json();\r",
+									"console.log(responseData)\r",
+									"\r",
+									"pm.test('Validate detail as new transaction record created', function(){\r",
+									"     pm.expect(responseData.sentCoin).to.eql(pm.environment.get(\"coin1\")),\r",
+									"    pm.expect(responseData.receivedCoin).to.eql(pm.environment.get(\"coin2\")),\r",
+									"    pm.expect(responseData.sentCoinAmount).to.eql(pm.environment.get(\"sentCoinAmount\")),\r",
+									"    pm.expect(responseData.receivedCoinAmount).to.eql(pm.environment.get(\"receivedCoinAmount\"))\r",
+									"})\r",
+									"pm.test('Validate created_at', function(){\r",
+									"  pm.expect(responseData.created_at).to.eql(pm.environment.get(\"creation\")  )\r",
+									"    });\r",
+									"\r",
+									"    const MarketPrice = ( (responseData.sentCoinAmount)/ (responseData.receivedCoinAmount));\r",
+									"    console.log(MarketPrice)\r",
+									"\r",
+									"pm.test('Check MarketPrice', function(){   \r",
+									"pm.expect(responseData.receivedCoinMarketPrice).to.eql(MarketPrice)\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api:gHPd8le5/transaction/{{id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api:gHPd8le5",
+								"transaction",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Edit Transaction Record",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"var responseData = pm.response.json();\r",
+									"console.log(responseData)\r",
+									"pm.environment.set(\"id\", responseData.id);\r",
+									"pm.environment.set(\"creation\", responseData.created_at);\r",
+									"pm.environment.set(\"sentCoinAmount\", responseData.sentCoinAmount);\r",
+									"pm.environment.set(\"receivedCoinAmount\", responseData.receivedCoinAmount);\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test('Validate detail as new transaction record created', function(){\r",
+									"    pm.expect(responseData.sentCoin).to.eql(pm.environment.get(\"coin1\")),\r",
+									"    pm.expect(responseData.receivedCoin).to.eql(pm.environment.get(\"coin2\")),\r",
+									"     pm.expect(responseData.sentCoinAmount).to.eql(pm.environment.get(\"sentCoinAmount\")),\r",
+									"    pm.expect(responseData.receivedCoinAmount).to.eql(pm.environment.get(\"receivedCoinAmount\"))\r",
+									"})\r",
+									"\r",
+									" const MarketPrice = ( (responseData.sentCoinAmount)/ (responseData.receivedCoinAmount));\r",
+									"console.log(MarketPrice)\r",
+									"\r",
+									"pm.test('Check MarketPrice', function(){   \r",
+									"pm.expect(responseData.receivedCoinMarketPrice).to.eql(MarketPrice)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"sentCoin\": \"{{coin1}}\",\n  \"receivedCoin\": \"{{coin2}}\",\n  \"sentCoinAmount\": 400,\n  \"receivedCoinAmount\": 2,\n  \"receivedCoinMarketPrice\": 200\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api:gHPd8le5/transaction/{{id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api:gHPd8le5",
+								"transaction",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET transaction by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var responseData = pm.response.json();\r",
+									"console.log(responseData)\r",
+									"pm.test('Validate detail as new transaction record created', function(){\r",
+									"    pm.expect(responseData.sentCoin).to.eql(pm.environment.get(\"coin1\")),\r",
+									"    pm.expect(responseData.receivedCoin).to.eql(pm.environment.get(\"coin2\")),\r",
+									"     pm.expect(responseData.sentCoinAmount).to.eql(pm.environment.get(\"sentCoinAmount\")),\r",
+									"    pm.expect(responseData.receivedCoinAmount).to.eql(pm.environment.get(\"receivedCoinAmount\"))\r",
+									"})\r",
+									"\r",
+									" const MarketPrice = ( (responseData.sentCoinAmount)/ (responseData.receivedCoinAmount));\r",
+									"console.log(MarketPrice)\r",
+									"\r",
+									"pm.test('Check MarketPrice', function(){   \r",
+									"pm.expect(responseData.receivedCoinMarketPrice).to.eql(MarketPrice)\r",
+									"});\r",
+									"pm.test('Validate created_at', function(){\r",
+									"  pm.expect(responseData.created_at).to.eql(pm.environment.get(\"creation\")  )\r",
+									"    });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "https://x8ki-letl-twmt.n7.xano.io/api:gHPd8le5/transaction/{{id}}",
+							"protocol": "https",
+							"host": [
+								"x8ki-letl-twmt",
+								"n7",
+								"xano",
+								"io"
+							],
+							"path": [
+								"api:gHPd8le5",
+								"transaction",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET All transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var responseBody = pm.response.json();\r",
+									"var numberOfTransactionRecords = responseBody.length;\r",
+									"console.log(numberOfTransactionRecords)\r",
+									"for(var i = 0 ; i< numberOfTransactionRecords; i++ ){\r",
+									"    pm.expect(responseBody[i]).to.have.property('id')\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api:gHPd8le5/transaction",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api:gHPd8le5",
+								"transaction"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Transaction Record",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Successful DELETE request\", () => {\r",
+									"  pm.expect(pm.response.code).to.be.eql(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api:gHPd8le5/transaction/{{id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api:gHPd8le5",
+								"transaction",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Verify recording of transaction with irrelevant data set.",
+			"item": [
+				{
+					"name": "POST transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"pm.test(\"Status code is BAD REQUEST\", function () {\r",
+									"    pm.response.to.have.status(\"Bad Request\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"    "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"coin1\": \"IN\",\n  \"coin2\": \"BHAT\",\n  \"coin1Amount\": \"\",\n  \"coin2Amount\": \"\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api:gHPd8le5/transaction",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api:gHPd8le5",
+								"transaction"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Verify recalling the transaction record before Post",
+			"item": [
+				{
+					"name": "GET transaction by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is Not Found\", function () {\r",
+									"    pm.response.to.have.status(\"Not Found\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api:gHPd8le5/transaction/{{id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api:gHPd8le5",
+								"transaction",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"var responseData = pm.response.json();\r",
+									"console.log(responseData)\r",
+									"pm.environment.set(\"id\", responseData.id);\r",
+									"pm.environment.set(\"creation\", responseData.created_at);\r",
+									"pm.environment.set(\"sentCoinAmount\", responseData.sentCoinAmount);\r",
+									"pm.environment.set(\"receivedCoinAmount\", responseData.receivedCoinAmount);\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test('Validate detail as new transaction record created', function(){\r",
+									"    pm.expect(responseData.sentCoin).to.eql(pm.environment.get(\"coin1\")),\r",
+									"    pm.expect(responseData.receivedCoin).to.eql(pm.environment.get(\"coin2\")),\r",
+									"     pm.expect(responseData.sentCoinAmount).to.eql(pm.environment.get(\"sentCoinAmount\")),\r",
+									"    pm.expect(responseData.receivedCoinAmount).to.eql(pm.environment.get(\"receivedCoinAmount\"))\r",
+									"})\r",
+									"\r",
+									"\r",
+									"    "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"coin1\": \"{{coin1}}\",\n  \"coin2\": \"{{coin2}}\",\n  \"coin1Amount\": 300,\n  \"coin2Amount\": 2\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api:gHPd8le5/transaction",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api:gHPd8le5",
+								"transaction"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET transaction by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var responseData = pm.response.json();\r",
+									"console.log(responseData)\r",
+									"pm.test('Validate detail as new transaction record created', function(){\r",
+									"    pm.expect(responseData.sentCoin).to.eql(pm.environment.get(\"coin1\")),\r",
+									"    pm.expect(responseData.receivedCoin).to.eql(pm.environment.get(\"coin2\")),\r",
+									"     pm.expect(responseData.sentCoinAmount).to.eql(pm.environment.get(\"sentCoinAmount\")),\r",
+									"    pm.expect(responseData.receivedCoinAmount).to.eql(pm.environment.get(\"receivedCoinAmount\"))\r",
+									"})\r",
+									"\r",
+									" const MarketPrice = ( (responseData.sentCoinAmount)/ (responseData.receivedCoinAmount));\r",
+									"console.log(MarketPrice)\r",
+									"\r",
+									"pm.test('Check MarketPrice', function(){   \r",
+									"pm.expect(responseData.receivedCoinMarketPrice).to.eql(MarketPrice)\r",
+									"});\r",
+									"pm.test('Validate created_at', function(){\r",
+									"  pm.expect(responseData.created_at).to.eql(pm.environment.get(\"creation\")  )\r",
+									"    });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "https://x8ki-letl-twmt.n7.xano.io/api:gHPd8le5/transaction/{{id}}",
+							"protocol": "https",
+							"host": [
+								"x8ki-letl-twmt",
+								"n7",
+								"xano",
+								"io"
+							],
+							"path": [
+								"api:gHPd8le5",
+								"transaction",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Edit Transaction Record",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"var responseData = pm.response.json();\r",
+									"console.log(responseData)\r",
+									"pm.environment.set(\"id\", responseData.id);\r",
+									"pm.environment.set(\"creation\", responseData.created_at);\r",
+									"pm.environment.set(\"sentCoinAmount\", responseData.sentCoinAmount);\r",
+									"pm.environment.set(\"receivedCoinAmount\", responseData.receivedCoinAmount);\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test('Validate detail as new transaction record created', function(){\r",
+									"    pm.expect(responseData.sentCoin).to.eql(pm.environment.get(\"coin1\")),\r",
+									"    pm.expect(responseData.receivedCoin).to.eql(pm.environment.get(\"coin2\")),\r",
+									"     pm.expect(responseData.sentCoinAmount).to.eql(pm.environment.get(\"sentCoinAmount\")),\r",
+									"    pm.expect(responseData.receivedCoinAmount).to.eql(pm.environment.get(\"receivedCoinAmount\"))\r",
+									"})\r",
+									"\r",
+									" const MarketPrice = ( (responseData.sentCoinAmount)/ (responseData.receivedCoinAmount));\r",
+									"console.log(MarketPrice)\r",
+									"\r",
+									"pm.test('Check MarketPrice', function(){   \r",
+									"pm.expect(responseData.receivedCoinMarketPrice).to.eql(MarketPrice)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"sentCoin\": \"{{coin1}}\",\n  \"receivedCoin\": \"{{coin2}}\",\n  \"sentCoinAmount\": 400,\n  \"receivedCoinAmount\": 2,\n  \"receivedCoinMarketPrice\": 200\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api:gHPd8le5/transaction/{{id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api:gHPd8le5",
+								"transaction",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Transaction Record Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Successful DELETE request\", () => {\r",
+									"  pm.expect(pm.response.code).to.be.eql(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api:gHPd8le5/transaction/{{id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api:gHPd8le5",
+								"transaction",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Verify Delete transaction which does not exist",
+			"item": [
+				{
+					"name": "DELETE Transaction Record",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is Not Found\", function () {\r",
+									"    pm.response.to.have.status(\"Not Found\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api:gHPd8le5/transaction/{{id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api:gHPd8le5",
+								"transaction",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Verify edit Transaction record before Post",
+			"item": [
+				{
+					"name": "POST Edit Transaction Record Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is Not Found\", function () {\r",
+									"    pm.response.to.have.status(\"Not Found\");\r",
+									"});\r",
+									"pm.test(\"Response type is JSON\", function(){\r",
+									"\tpm.response.to.be.json;\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"sentCoin\": \"{{coin1}}\",\n  \"receivedCoin\": \"{{coin2}}\",\n  \"sentCoinAmount\": 400,\n  \"receivedCoinAmount\": 2,\n  \"receivedCoinMarketPrice\": 200\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api:gHPd8le5/transaction/{{id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api:gHPd8le5",
+								"transaction",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Verify recalling all the transaction record and deleting the record",
+			"item": [
+				{
+					"name": "GET All transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var responseBody = pm.response.json();\r",
+									"var numberOfTransactionRecords = responseBody.length;\r",
+									"console.log(numberOfTransactionRecords)\r",
+									"for(var i = 0 ; i< numberOfTransactionRecords; i++ ){\r",
+									"    pm.expect(responseBody[i]).to.have.property('id')\r",
+									"}\r",
+									"pm.environment.set(\"id\", responseBody[0].id);\r",
+									"pm.environment.set(\"creation\", responseBody[0].created_at);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api:gHPd8le5/transaction",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api:gHPd8le5",
+								"transaction"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET transaction by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var responseData = pm.response.json();\r",
+									"console.log(responseData)\r",
+									"\r",
+									" const MarketPrice = ( (responseData.sentCoinAmount)/ (responseData.receivedCoinAmount));\r",
+									"console.log(MarketPrice)\r",
+									"\r",
+									"pm.test('Check MarketPrice', function(){   \r",
+									"pm.expect(responseData.receivedCoinMarketPrice).to.eql(MarketPrice)\r",
+									"});\r",
+									"pm.test('Validate created_at', function(){\r",
+									"  pm.expect(responseData.created_at).to.eql(pm.environment.get(\"creation\")  )\r",
+									"    });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "https://x8ki-letl-twmt.n7.xano.io/api:gHPd8le5/transaction/{{id}}",
+							"protocol": "https",
+							"host": [
+								"x8ki-letl-twmt",
+								"n7",
+								"xano",
+								"io"
+							],
+							"path": [
+								"api:gHPd8le5",
+								"transaction",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Transaction Record",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Successful DELETE request\", () => {\r",
+									"  pm.expect(pm.response.code).to.be.eql(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api:gHPd8le5/transaction/{{id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api:gHPd8le5",
+								"transaction",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET transaction by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is Not Found\", function () {\r",
+									"    pm.response.to.have.status(\"Not Found\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "https://x8ki-letl-twmt.n7.xano.io/api:gHPd8le5/transaction/{{id}}",
+							"protocol": "https",
+							"host": [
+								"x8ki-letl-twmt",
+								"n7",
+								"xano",
+								"io"
+							],
+							"path": [
+								"api:gHPd8le5",
+								"transaction",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Verify edit from the all the transaction record",
+			"item": [
+				{
+					"name": "GET All transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var responseBody = pm.response.json();\r",
+									"var numberOfTransactionRecords = responseBody.length;\r",
+									"console.log(numberOfTransactionRecords)\r",
+									"for(var i = 0 ; i< numberOfTransactionRecords; i++ ){\r",
+									"    pm.expect(responseBody[i]).to.have.property('id')\r",
+									"}\r",
+									"pm.environment.set(\"id\", responseBody[0].id);\r",
+									"pm.environment.set(\"creation\", responseBody[0].created_at);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api:gHPd8le5/transaction",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api:gHPd8le5",
+								"transaction"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Edit Transaction Record",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"var responseData = pm.response.json();\r",
+									"console.log(responseData)\r",
+									"pm.environment.set(\"id\", responseData.id);\r",
+									"pm.environment.set(\"creation\", responseData.created_at);\r",
+									"pm.environment.set(\"sentCoinAmount\", responseData.sentCoinAmount);\r",
+									"pm.environment.set(\"receivedCoinAmount\", responseData.receivedCoinAmount);\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test('Validate detail as new transaction record created', function(){\r",
+									"    pm.expect(responseData.sentCoin).to.eql(pm.environment.get(\"coin1\")),\r",
+									"    pm.expect(responseData.receivedCoin).to.eql(pm.environment.get(\"coin2\")),\r",
+									"     pm.expect(responseData.sentCoinAmount).to.eql(pm.environment.get(\"sentCoinAmount\")),\r",
+									"    pm.expect(responseData.receivedCoinAmount).to.eql(pm.environment.get(\"receivedCoinAmount\"))\r",
+									"})\r",
+									"\r",
+									" const MarketPrice = ( (responseData.sentCoinAmount)/ (responseData.receivedCoinAmount));\r",
+									"console.log(MarketPrice)\r",
+									"\r",
+									"pm.test('Check MarketPrice', function(){   \r",
+									"pm.expect(responseData.receivedCoinMarketPrice).to.eql(MarketPrice)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"sentCoin\": \"{{coin1}}\",\n  \"receivedCoin\": \"{{coin2}}\",\n  \"sentCoinAmount\": 400,\n  \"receivedCoinAmount\": 2,\n  \"receivedCoinMarketPrice\": 200\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api:gHPd8le5/transaction/{{id}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api:gHPd8le5",
+								"transaction",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET transaction by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var responseData = pm.response.json();\r",
+									"console.log(responseData)\r",
+									"\r",
+									" const MarketPrice = ( (responseData.sentCoinAmount)/ (responseData.receivedCoinAmount));\r",
+									"console.log(MarketPrice)\r",
+									"\r",
+									"pm.test('Check MarketPrice', function(){   \r",
+									"pm.expect(responseData.receivedCoinMarketPrice).to.eql(MarketPrice)\r",
+									"});\r",
+									"pm.test('Validate created_at', function(){\r",
+									"  pm.expect(responseData.created_at).to.eql(pm.environment.get(\"creation\")  )\r",
+									"    });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "https://x8ki-letl-twmt.n7.xano.io/api:gHPd8le5/transaction/{{id}}",
+							"protocol": "https",
+							"host": [
+								"x8ki-letl-twmt",
+								"n7",
+								"xano",
+								"io"
+							],
+							"path": [
+								"api:gHPd8le5",
+								"transaction",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
